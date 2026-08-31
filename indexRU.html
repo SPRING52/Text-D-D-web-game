@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/normalize.css" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/dice.css" />
+    <script src="scripts/script.js" type="module" defer></script>
+    <script src="/scripts/engine.js" type="module" defer></script>
+    <title>Seikkailupeli</title>
+  </head>
+  <body>
+    <header class="flex">
+      <span></span>
+      <h1>Текстовая РПГ</h1>
+      <ul>
+        <li><a href="indexRU.html">RU</a></li>
+        <li><a href="indexFI.html">FI</a></li>
+      </ul>
+    </header>
+    <main class="game-field container flex">
+      <div class="flex first-form container">
+        <h2>Начальная форма</h2>
+        <label>Как зовут персонажа?</label>
+        <input
+          type="text"
+          name="name"
+          id="nameInput"
+          placeholder="Имя персонажа"
+        />
+        <button type="button" id="startGame">Начать игру!</button>
+      </div>
+
+      <div class="gameplay-field hide">
+        <div class="game-text" id="textField">
+          <p class="text" id="text"></p>
+          <div class="arrow disappearane">▾</div>
+        </div>
+        <div class="choices flex hide" id="choices"></div>
+        <div class="instruction">
+          <p>i – avaa inventaario</p>
+        </div>
+      </div>
+
+      <div class="inventory grid hide">
+        <div class="stats flex">
+          <p></p>
+        </div>
+        <div class="items grid"></div>
+      </div>
+
+      <div id="diceContainer" class="dice-container hide">
+        <div id="dice-title">КУБИК!</div>
+        <div id="dice-requirement"></div>
+
+        <div id="dice-result">?</div>
+
+        <div id="dice-status"></div>
+      </div>
+    </main>
+  </body>
+</html>

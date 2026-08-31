@@ -1,0 +1,870 @@
+{
+  "meta": {
+    "title": "Malmit ja hirviö",
+    "version": "1.0.0",
+    "startScene": "PROLOGUE"
+  },
+  "items": [],
+  "scenes": {
+    "PROLOGUE": {
+      "texts": [
+        "On kulunut 35 päivää siitä, kun aloitin vaellukseni Faerûnin mailla seikkailijana.",
+        "Minä olen {name}. Tavallinen seikkailija.",
+        "Tänä aikana olen ehtinyt ansaita {gold} kultakolikkoa. Ei niin paljon kuin olisin toivonut, mutta pieneen matkaan sen pitäisi riittää.",
+        "Tänään saavuin Orfiin — pieneen kaupunkiin, joka sijaitsee lähellä kaivosluolaa.",
+        "Ensi silmäyksellä täällä ei ole mitään tavallisesta poikkeavaa. Pieniä taloja, kauppapuoteja ja muutamia ohikulkijoita.",
+        "Silti jokin pistää heti silmään.",
+        "Kaduilla on melko paljon rotevia miehiä työvaatteissa. Jotkut näyttävät väsyneiltä, kun taas toiset väittelevät kiivaasti jostakin.",
+        "Minne menet?"
+      ],
+      "choices": [
+        {
+          "label": "Kilta",
+          "next": "GUILD"
+        }
+      ]
+    },
+    "GUILD": {
+      "texts": [
+        "Päätät mennä kiltaan katsomaan erilaisia toimeksiantoja ja tyydyttämään seikkailunhaluasi.",
+        "Nuori nainen tiskin takana tervehtii sinua.",
+        "— Tervetuloa Orfin seikkailijakiltaan. Etsitkö töitä?",
+        "Selität olevasi seikkailija ja haluavasi nähdä tarjolla olevat toimeksiannot.",
+        "Hän osoittaa ilmoitustaulua.",
+        "Taululla on yksi ilmoitus:"
+      ],
+      "choices": [
+        {
+          "label": "Kaivosluolaan asettuneen hirviön tuhoaminen. (palkkio: 100 kultakolikkoa)",
+          "next": "CAVE_FLYER"
+        },
+        {
+          "label": "Poistu killasta",
+          "next": "PROLOGUE",
+          "actions": [
+            {
+              "type": "toChoices"
+            }
+          ]
+        }
+      ]
+    },
+    "CAVE_FLYER": {
+      "texts": [
+        "Katsot ilmoitusta. Siinä kerrotaan työtehtävästä.",
+        "Läheiseen kaivosluolaan on ilmestynyt tuntematon hirviö. Työläiset kieltäytyvät jatkamasta kaivostoimintaa, ennen kuin uhka on poistettu.",
+        "Hirviön tuhoaminen ei ole helppo tehtävä. Siihen tarvitaan ainakin jonkinlainen ase.",
+        "Aseen voi yrittää ostaa suoraan killasta kalliilla hinnalla tai etsiä sepän ja ostaa sen häneltä halvemmalla.",
+        "Mitä siis teet?"
+      ],
+      "choices": [
+        {
+          "label": "Ota toimeksianto ja etsi seppä",
+          "next": "BLACKSMITH_FAIL",
+          "actions": [
+            {
+              "type": "addItem",
+              "item": {
+                "itemName": "Ilmoitus hirviön tappamisesta",
+                "itemID": "cave_flyer",
+                "description": "Ilmoitus hirviöstä eroon pääsemiseksi. Ilmoituksessa on lisätietoa: Läheiseen kaivosluolaan on ilmestynyt tuntematon hirviö. Työläiset kieltäytyvät jatkamasta kaivostoimintaa, ennen kuin uhka on poistettu."
+              }
+            },
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "BLACKSMITH_SUCCESS",
+              "threshold": 6
+            }
+          ]
+        }
+      ]
+    },
+    "BLACKSMITH_FAIL": {
+      "texts": [
+        "Kiertelet kaupungilla yrittäen löytää sepän.",
+        "Et onnistunut löytämään seppää.",
+        "Minne menet nyt?"
+      ],
+      "choices": [
+        {
+          "label": "Mene kiltaan",
+          "next": "GUILD",
+          "actions": [
+            {
+              "type": "toChoices"
+            }
+          ]
+        },
+        {
+          "label": "Yritä löytää seppä uudelleen",
+          "next": "BLACKSMITH_FAIL",
+          "actions": [
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "BLACKSMITH_SUCCESS",
+              "threshold": 5
+            }
+          ]
+        }
+      ]
+    },
+    "BLACKSMITH_SUCCESS": {
+      "texts": [
+        "Kiertelet kaupungilla yrittäen löytää sepän.",
+        "Löydät sepän ja astut hänen puotiinsa.",
+        "Hänellä on monenlaisia aseita.",
+        "Katseesi pysähtyy 30 kultakolikkoa maksavaan rautamiekkaan.",
+        "Mitä teet?"
+      ],
+      "choices": [
+        {
+          "label": "Osta ase (30 kultakolikkoa)",
+          "next": "BUY_SWORD_FROM_BLACKSMITH",
+          "condition": {
+            "hasGold": 30
+          },
+          "actions": [
+            {
+              "type": "addItem",
+              "item": {
+                "itemName": "Sepältä ostettu miekka",
+                "itemID": "sword_blacksmith",
+                "description": "Miekka on tehty huolellisesti raudasta. Se on erittäin terävä."
+              }
+            },
+            {
+              "type": "spendGold",
+              "value": 30
+            }
+          ]
+        },
+        {
+          "label": "Älä osta asetta",
+          "next": "NO_BUY_SWORD_FROM_BLACKSMITH"
+        },
+        {
+          "label": "Mene kiltaan",
+          "next": "GUILD",
+          "actions": [
+            {
+              "type": "toChoices"
+            }
+          ]
+        }
+      ]
+    },
+    "BUY_SWORD_FROM_BLACKSMITH": {
+      "texts": [
+        "Ostat miekan sepältä 30 kultakolikolla.",
+        "Miekka näyttää olevan huolellisesti valmistettu raudasta ja erittäin terävä.",
+        "Minne menet nyt?"
+      ],
+      "choices": [
+        {
+          "label": "Mene kaivosluolaan",
+          "next": "CAVE"
+        },
+        {
+          "label": "Mene kiltaan",
+          "next": "GUILD",
+          "actions": [
+            {
+              "type": "toChoices"
+            }
+          ]
+        }
+      ]
+    },
+    "NO_BUY_SWORD_FROM_BLACKSMITH": {
+      "texts": [
+        "Päätät olla ostamatta asetta.",
+        "Ilman asetta hirviöstä eroon pääseminen tulee olemaan vaikeaa.",
+        "Mitä aiot tehdä?"
+      ],
+      "choices": [
+        {
+          "label": "Mene kaivosluolaan ilman miekkaa",
+          "next": "CAVE_WITHOUT_SWORD"
+        },
+        {
+          "label": "Osta sittenkin miekka (30 kultakolikkoa)",
+          "next": "BUY_SWORD_FROM_BLACKSMITH",
+          "condition": {
+            "hasGold": 30
+          },
+          "actions": [
+            {
+              "type": "addItem",
+              "item": {
+                "itemName": "Sepältä ostettu miekka",
+                "itemID": "sword_blacksmith",
+                "description": "Miekka on tehty huolellisesti raudasta. Se on erittäin terävä."
+              }
+            },
+            {
+              "type": "spendGold",
+              "value": 30
+            }
+          ]
+        }
+      ]
+    },
+    "CAVE": {
+      "texts": [
+        "Saavut kaivosluolalle.",
+        "Sisäänkäynnin edessä seisoo kaksi miestä.",
+        "Selität saapuneesi killan toimeksiannosta päästäksesi eroon hirviöstä.",
+        "He huomaavat miekkasi ja vaihtavat katseita.",
+        "— Hyvä. Ainakaan et ole menossa sinne paljain käsin.",
+        "Toinen vartijoista astuu sivuun.",
+        "— Ole varovainen. Emme tiedä, mitä siellä on."
+      ],
+      "choices": [
+        {
+          "label": "Mene syvemmälle luolaan",
+          "next": "IN_CAVE"
+        }
+      ]
+    },
+    "CAVE_WITHOUT_SWORD": {
+      "texts": [
+        "Saavut kaivosluolalle.",
+        "Sisäänkäynnin edessä seisoo kaksi miestä.",
+        "Sanot saapuneesi killan toimeksiannosta.",
+        "Vartijat tarkastelevat sinua.",
+        "— Missä aseesi on?",
+        "Selität aikovasi selviytyä hirviöstä ilman sitä.",
+        "Vartijat eivät selvästikään vaikutu."
+      ],
+      "choices": [
+        {
+          "label": "Näytä miekka",
+          "next": "IN_CAVE",
+          "condition": {
+            "hasItem": "sword_blacksmith"
+          }
+        },
+        {
+          "label": "Hae miekka",
+          "next": "BLACKSMITH_SUCCESS"
+        },
+        {
+          "label": "Vakuuta, että sinulla on piilotettu ase",
+          "next": "CAVE_BELIEF_FAIL",
+          "actions": [
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "CAVE_BELIEF_SUCCESS",
+              "threshold": 10
+            }
+          ]
+        },
+        {
+          "label": "Lahjo vartijat",
+          "next": "CAVE_BRIBE",
+          "condition": {
+            "hasGold": 10
+          },
+          "actions": [
+            {
+              "type": "spendGold",
+              "value": 10
+            }
+          ]
+        }
+      ]
+    },
+    "CAVE_BELIEF_FAIL": {
+      "texts": [
+        "Yrität vakuuttaa vartijat siitä, ettet tarvitse asetta.",
+        "He katsovat sinua hiljaa.",
+        "— Ei. Emme aio olla vastuussa kuolemastasi.",
+        "Sinun on peräännyttävä."
+      ],
+      "choices": [
+        {
+          "label": "Hae ase",
+          "next": "BLACKSMITH_SUCCESS"
+        },
+        {
+          "label": "Lahjo vartijat",
+          "next": "CAVE_BRIBE",
+          "condition": {
+            "hasGold": 10
+          },
+          "actions": [
+            {
+              "type": "spendGold",
+              "value": 10
+            }
+          ]
+        },
+        {
+          "label": "Poistu Orfista",
+          "next": "THE_ENDING_1"
+        }
+      ]
+    },
+    "CAVE_BELIEF_SUCCESS": {
+      "texts": [
+        "Selität rauhallisesti vartijoille olevasi seikkailija ja tottunut toimimaan vaarallisten olentojen kanssa.",
+        "Lyhyen väittelyn jälkeen toinen miehistä huokaisee.",
+        "— Hyvä on. Jos olet noin varma itsestäsi, mene sitten.",
+        "— Älä sitten myöhemmin sano, ettemme varoittaneet sinua."
+      ],
+      "choices": [
+        {
+          "label": "Mene luolaan",
+          "next": "IN_CAVE"
+        }
+      ]
+    },
+    "CAVE_BRIBE": {
+      "texts": [
+        "Ojennat vartijoille huomaamatta 10 kultakolikkoa.",
+        "He vaihtavat katseita.",
+        "— Me emme nähneet mitään.",
+        "Toinen heistä astuu sivuun.",
+        "— Mene sisään, ennen kuin muutamme mielemme."
+      ],
+      "choices": [
+        {
+          "label": "Mene luolaan",
+          "next": "IN_CAVE"
+        }
+      ]
+    },
+    "IN_CAVE": {
+      "texts": [
+        "Olet jo syvällä luolassa.",
+        "Ympärilläsi on hylättyjä hakkuja ja louhimatonta malmia.",
+        "Paikoin seinissä näkyy tuoreita naarmuja.",
+        "Hieman kauempaa kuuluu outoja ääniä ja raskasta murinaa.",
+        "Mitä aiot tehdä?"
+      ],
+      "choices": [
+        {
+          "label": "Valmista miekka",
+          "next": "IN_CAVE_SWORD_IS_READY",
+          "condition": {
+            "hasItem": "sword_blacksmith"
+          }
+        },
+        {
+          "label": "Käänny ympäri ja poistu luolasta",
+          "next": "THE_ENDING_1"
+        },
+        {
+          "label": "Älä välitä siitä ja jatka eteenpäin.",
+          "next": "IN_CAVE_MOVE_ON"
+        }
+      ]
+    },
+    "IN_CAVE_SWORD_IS_READY": {
+      "texts": [
+        "Otat miekan molempiin käsiisi ja etenet varovasti.",
+        "Äänet voimistuvat. Murina käy kovemmaksi.",
+        "Olet varma — hirviö on aivan mutkan takana.",
+        "Mitä siis teet?"
+      ],
+      "choices": [
+        {
+          "label": "Hyökkää yllättäen mutkan takaa",
+          "next": "HIT_THE_MONSTER_FAIL",
+          "actions": [
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "HIT_THE_MONSTER_SUCCESS",
+              "threshold": 15
+            }
+          ]
+        },
+        {
+          "label": "Rauhoitu ja laske miekka",
+          "next": "MONSTER"
+        },
+        {
+          "label": "Käänny ympäri ja lähde",
+          "next": "THE_ENDING_1"
+        }
+      ]
+    },
+    "IN_CAVE_MOVE_ON": {
+      "texts": [
+        "Jatkat eteenpäin.",
+        "Saavut mutkaan. Sen takana on varmasti juuri se hirviö.",
+        "Mitä teet?"
+      ],
+      "choices": [
+        {
+          "label": "Vedä miekka esiin",
+          "next": "IN_CAVE_TAKE_THE_SWORD",
+          "condition": {
+            "hasItem": "sword_blacksmith"
+          }
+        },
+        {
+          "label": "Kerää rohkeutesi ja kohtaa hirviö",
+          "next": "MONSTER"
+        },
+        {
+          "label": "Pelkää ja pakene",
+          "next": "THE_ENDING_2"
+        }
+      ]
+    },
+    "IN_CAVE_TAKE_THE_SWORD": {
+      "texts": [
+        "Päätät ottaa miekan käteesi.",
+        "Mutkan takaa kuuluu yhä hirviön ääniä.",
+        "Mitä siis teet?"
+      ],
+      "choices": [
+        {
+          "label": "Valmistaudu yllätyshyökkäykseen",
+          "next": "HIT_THE_MONSTER_FAIL",
+          "actions": [
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "HIT_THE_MONSTER_SUCCESS",
+              "threshold": 15
+            }
+          ]
+        },
+        {
+          "label": "Rauhoitu ja laske miekka",
+          "next": "MONSTER"
+        },
+        {
+          "label": "Pakene",
+          "next": "THE_ENDING_2"
+        }
+      ]
+    },
+    "HIT_THE_MONSTER_FAIL": {
+      "texts": [
+        "Astut nopeasti mutkan taakse ja näet valtavan hirviön.",
+        "Se näyttää valtavalta kilpikonnalta, joka on noussut kahdelle jalalle ja jonka selässä on kivinen panssari.",
+        "Isket voimakkaasti, mutta terä liukuu kilahtaen kivistä panssaria pitkin.",
+        "Hirviö kääntyy äkisti.",
+        "Nyt se tietää varmasti, että olet täällä."
+      ],
+      "choices": [
+        {
+          "label": "Yritä hyökätä uudelleen",
+          "next": "MONSTER_COMBAT_FAIL",
+          "actions": [
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "MOSTER_COMBAT_SUCCESS",
+              "threshold": 15
+            }
+          ]
+        },
+        {
+          "label": "Asetu puolustusasentoon ja puhu",
+          "next": "MONSTER_TALK_WITH_HIM"
+        },
+        {
+          "label": "Pakene",
+          "next": "THE_ENDING_2"
+        }
+      ]
+    },
+    "MONSTER_COMBAT_FAIL": {
+      "texts": [
+        "Hyökkäät jälleen.",
+        "Hirviö ehtii suojautua kivisen panssarinsa taakse.",
+        "Sinulle käy selväksi, ettei sitä ole helppo voittaa pelkällä raivokkaalla hyökkäyksellä.",
+        "Se ei hyökkää kimppuusi ensin. Sen sijaan se vain murisee ja perääntyy malmistaan."
+      ],
+      "choices": [
+        {
+          "label": "Pysähdy ja puhu",
+          "next": "MONSTER_TALK_WITH_HIM"
+        },
+        {
+          "label": "Pakene",
+          "next": "THE_ENDING_2"
+        }
+      ]
+    },
+    "MOSTER_COMBAT_SUCCESS": {
+      "texts": [
+        "Hyökkäät jälleen.",
+        "Hirviö ei ehdi väistää.",
+        "Osumasi osuu sen haavoittuvaan kohtaan.",
+        "Hirviö päästää lyhyen karjaisun ja kaatuu raskaasti maahan.",
+        "Kaikki päättyy yhteen iskuun.",
+        "Olet voittanut hirviön."
+      ],
+      "choices": {
+        "label": "Забрать награду в гильдии",
+        "next": "THE_ENDING_3",
+        "actions": [
+          {
+            "type": "addGold",
+            "value": 100
+          }
+        ]
+      }
+    },
+    "MONSTER": {
+      "texts": [
+        "Astut mutkan taakse.",
+        "Edessäsi on valtava olento, jonka selässä on kivinen panssari.",
+        "Se näyttää kahdelle jalalle nousseelta kilpikonnalta, jonka pää on epätavallisesti painunut alaspäin.",
+        "Hyökkäämisen sijaan se on keskittynyt malmiin.",
+        "Hirviö tutkii varovasti mineraalinpalaa ja vetää kyntensä sen pintaa pitkin.",
+        "Näyttää siltä, että juuri malmi kiinnostaa sitä.",
+        "Mitä aiot tehdä?"
+      ],
+      "choices": [
+        {
+          "label": "Ota miekka nopeasti esiin ja iske hirviötä",
+          "next": "HIT_THE_MONSTER_FAIL_2",
+          "condition": {
+            "hasItem": "sword_blacksmith"
+          },
+          "actions": [
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "HIT_THE_MONSTER_SUCCESS_2",
+              "threshold": 12
+            }
+          ]
+        },
+        {
+          "label": "Yritä puhua hirviölle",
+          "next": "MONSTER_TALK_WITH_HIM"
+        },
+        {
+          "label": "Pakene. Juokse vain pakoon",
+          "next": "THE_ENDING_2"
+        }
+      ]
+    },
+    "HIT_THE_MONSTER_FAIL_2": {
+      "texts": [
+        "Tartut nopeasti miekkaan ja syöksyt eteenpäin.",
+        "Hirviö ehtii huomata liikkeesi.",
+        "Iskusi menee sen kehon ohi.",
+        "Olento kääntyy äkisti ja päästää kovan karjaisun."
+      ],
+      "choices": [
+        {
+          "label": "Yritä puhua",
+          "next": "MONSTER_TALK_WITH_HIM"
+        },
+        {
+          "label": "Yritä hyökätä uudelleen",
+          "next": "MONSTER_COMBAT_FAIL",
+          "actions": [
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "MOSTER_COMBAT_SUCCESS",
+              "threshold": 12
+            }
+          ]
+        },
+        {
+          "label": "Pakene",
+          "next": "THE_ENDING_2"
+        }
+      ]
+    },
+    "HIT_THE_MONSTER_SUCCESS_2": {
+      "texts": [
+        "Tartut nopeasti miekkaan ja annat tarkan iskun.",
+        "Hirviö ei ehdi reagoida.",
+        "Terä osuu sen haavoittuvaan kohtaan.",
+        "Olento kaatuu maahan.",
+        "Tutkit sitä ja ymmärrät, että taistelu päättyi lähes välittömästi.",
+        "Olet suorittanut toimeksiannon."
+      ],
+      "choices": [
+        {
+          "label": "Palaa kiltaan hakemaan palkkio",
+          "next": "THE_ENDING_3",
+          "actions": [
+            {
+              "type": "addGold",
+              "value": 100
+            }
+          ]
+        }
+      ]
+    },
+    "MONSTER_TALK_WITH_HIM": {
+      "texts": [
+        "Aloitat keskustelun hirviön kanssa.",
+        "Hirviö katsoo sinua varuillaan.",
+        "Muutamaan sekuntiin ei tapahdu mitään.",
+        "Sitten se päästää matalan äänen, joka hämmästyttävällä tavalla muistuttaa puhetta.",
+        "Ymmärrät, että se kykenee ajattelemaan ja näyttää ymmärtävän sinua.",
+        "Vähitellen keskustelusta tulee yhä ymmärrettävämpää.",
+        "Hirviö selittää tulleensa tänne epätavallisten ja kauniiden malmien vuoksi.",
+        "Se keräsi mineraaleja ja katseli niitä, koska ei ollut koskaan ennen nähnyt mitään vastaavaa.",
+        "Se ei halunnut pelotella kaivostyöläisiä eikä varsinkaan vahingoittaa heitä.",
+        "Suurin osa paniikista johtui siitä, etteivät ihmiset yksinkertaisesti tienneet, kuka luolan syvyyksissä oli.",
+        "Nyt sinun on päätettävä, mitä teet tällä tiedolla."
+      ],
+      "choices": [
+        {
+          "label": "Pyydä hirviötä lähtemään kaivoksesta",
+          "next": "MONSTER_TALK_END_1",
+          "actions": [
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "MONSTER_LEFT_THE_CAVE",
+              "threshold": 10
+            }
+          ]
+        },
+        {
+          "label": "Ehdota, että se saa jäädä luolaan, mutta ei enää pelottele työläisiä",
+          "next": "MONSTER_TALK_END_2"
+        },
+        {
+          "label": "Kerro killalle totuus",
+          "next": "THE_ENDING_5",
+          "actions": [
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "THE_ENDING_4",
+              "threshold": 8
+            }
+          ]
+        }
+      ]
+    },
+    "MONSTER_TALK_END_1": {
+      "texts": [
+        "Ehdotat sille, että se lähtisi vapaaehtoisesti luolasta.",
+        "Hirviö kuuntelee ehdotuksesi ja torjuu sen.",
+        "Arvovaltasi ei taida olla kovin suuri.",
+        "Mitä sanoisit sille?"
+      ],
+      "choices": [
+        {
+          "label": "Ehdota, että se saa jäädä luolaan, mutta ei enää pelottele työläisiä",
+          "next": "MONSTER_TALK_END_2"
+        },
+        {
+          "label": "Kerro killalle totuus",
+          "next": "THE_ENDING_5",
+          "actions": [
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "THE_ENDING_4",
+              "threshold": 8
+            }
+          ]
+        }
+      ]
+    },
+    "MONSTER_TALK_END_2": {
+      "texts": [
+        "Ehdotat hirviölle, että se jäisi luolaan mutta pysyttelisi piilossa.",
+        "Pitkän harkinnan jälkeen hirviö suostuu.",
+        "Tehtäväsi on suoritettu, vaikkakaan ei aivan niin kuin toimeksiantajat tarkoittivat."
+      ],
+      "choices": [
+        {
+          "label": "Päätä seikkailu",
+          "next": "THE_ENDING_7",
+          "actions": [
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "THE_ENDING_7.5",
+              "threshold": 12
+            }
+          ]
+        }
+      ]
+    },
+    "MONSTER_LEFT_THE_CAVE": {
+      "texts": [
+        "Ehdotat hirviölle, että se lähtisi vapaaehtoisesti luolasta.",
+        "Pitkän harkinnan jälkeen hirviö hyväksyy ehdotuksesi ja lähtee luolasta.",
+        "Se lähtee toisen uloskäynnin kautta, josta kukaan ei tiedä.",
+        "Työsi on tehty, mutta kysymys kuuluu: saatko palkkiosi ilman todisteita?"
+      ],
+      "choices": [
+        {
+          "label": "Poistu luolasta",
+          "next": "THE_ENDING_6.5",
+          "actions": [
+            {
+              "type": "rollDice",
+              "die": 20,
+              "onSuccess": "THE_ENDING_6",
+              "threshold": 12
+            }
+          ]
+        }
+      ]
+    },
+    "THE_ENDING_1": {
+      "texts": [
+        "Pysähdyt.",
+        "Olipa toimeksianto mikä tahansa, et ole valmis vaarantamaan henkeäsi sen vuoksi.",
+        "Käännyt ympäri ja poistut luolasta.",
+        "Toimeksianto jää suorittamatta.",
+        "Joskus paras tapa selvitä seikkailusta on ymmärtää ajoissa, ettei se ole riskin arvoinen.",
+        "LOPPU 1: Poistuit luolasta."
+      ],
+      "choices": [
+        {
+          "label": "Aloita alusta",
+          "next": "PROLOGUE"
+        }
+      ]
+    },
+    "THE_ENDING_2": {
+      "texts": [
+        "Näet hirviön kaikessa kauheudessaan.",
+        "Valtava ruumis, kivinen panssari ja pelottava karjaisu saavat sinut unohtamaan kaiken muun.",
+        "Käännyt ympäri ja juokset pakoon.",
+        "Et ajattele palkkiota etkä toimeksiantoa.",
+        "Haluat vain yhden asian — päästä ulos.",
+        "LOPPU 2: Pakenit kauhuissasi hirviötä."
+      ],
+      "choices": [
+        {
+          "label": "Aloita alusta",
+          "next": "PROLOGUE"
+        }
+      ]
+    },
+    "THE_ENDING_3": {
+      "texts": [
+        "Palaat luolasta.",
+        "Vartijat katsovat sinua yllättyneinä.",
+        "— Joko kaikki on ohi?",
+        "Näytät heille vain hiljaa, ettei hirviö enää ole uhka.",
+        "Killassa sinulle maksetaan 100 kultakolikkoa suoritetusta toimeksiannosta.",
+        "Tarinasi päättyy nopeasti, mutta tehokkaasti.",
+        "LOPPU 3: Tapoit hirviön nopealla iskulla."
+      ],
+      "choices": [
+        {
+          "label": "Aloita alusta",
+          "next": "PROLOGUE"
+        }
+      ]
+    },
+    "THE_ENDING_4": {
+      "texts": [
+        "Palaat Orfiin.",
+        "Kauhistuttavan hirviötarinan sijaan kerrot totuuden: olento osoittautui älykkääksi eikä aikonut hyökätä ihmisten kimppuun.",
+        "Työläiset eivät aluksi usko sinua.",
+        "Pitkän keskustelun jälkeen kilta päättää olla tappamatta olentoa, kunhan se pitää sopimuksesta kiinni.",
+        "Vähitellen kaivostyöläiset palaavat töihin, ja hirviö jää luolan syvyyksiin ihailemaan harvinaisia mineraaleja.",
+        "Et saanut tavallista palkkiota hirviön tappamisesta.",
+        "Sen sijaan sinulla on nyt tarina, jota tuskin yksikään toinen seikkailija voisi kertoa.",
+        "LOPPU 4: Ymmärsit hirviötä ja ratkaisit ongelman ilman tappamista."
+      ],
+      "choices": [
+        {
+          "label": "Aloita alusta",
+          "next": "PROLOGUE"
+        }
+      ]
+    },
+    "THE_ENDING_5": {
+      "texts": [
+        "Päätät kertoa killalle totuuden hirviöstä.",
+        "Kerro älykkäästä hirviöstä, sen rakkaudesta malmeihin ja siitä, ettei se ole vaarallinen.",
+        "He eivät hyväksy tällaista ratkaisua ja päättävät hoitaa hirviön itse.",
+        "Yrititpä miten tahansa, et onnistu muuttamaan heidän mieltään.",
+        "Jäät ilman kultaa ja suru sydämessäsi.",
+        "Harmi, että seikkailuissa on myös huonoja hetkiä.",
+        "LOPPU 5: Et onnistunut vakuuttamaan kaikkia hirviön vaarattomuudesta."
+      ],
+      "choices": [
+        {
+          "label": "Aloita alusta",
+          "next": "PROLOGUE"
+        }
+      ]
+    },
+    "THE_ENDING_6": {
+      "texts": [
+        "Poistut luolasta.",
+        "Vartijat katsovat sinua yllättyneinä.",
+        "— Joko kaikki on ohi?",
+        "Sanot, ettei uhkaa enää ole.",
+        "— Vai niin? Mutta missä ovat todisteet?",
+        "Kerro, että hirviö lähti itse eikä enää häiritse kaivostyöläisiä.",
+        "— Aivan, ja mehän uskomme sinua. Älä odota kultaa ennen kuin tuot todisteita.",
+        "Lopulta et saanut lainkaan kultaa. Mutta ainakin säästit mahdollisimman monta henkeä.",
+        "LOPPU 6: Hirviö lähti, mutta kukaan ei uskonut sitä."
+      ],
+      "choices": [
+        {
+          "label": "Aloita alusta",
+          "next": "PROLOGUE"
+        }
+      ]
+    },
+    "THE_ENDING_6.5": {
+      "texts": [
+        "Poistut luolasta.",
+        "Vartijat katsovat sinua yllättyneinä.",
+        "— Joko kaikki on ohi?",
+        "Sanot, ettei uhkaa enää ole.",
+        "— Vai niin? Mutta missä ovat todisteet?",
+        "Kerro, että hirviö lähti itse eikä enää häiritse kaivostyöläisiä.",
+        "— Vai niin? En tiennyt, että olet hyvä diplomaatti. Voit hakea palkkiosi killasta.",
+        "Menet kiltaan ja haet kultasi.",
+        "LOPPU 6.5: Hirviö lähti ja sait 100 kultakolikkoasi."
+      ],
+      "choices": [
+        {
+          "label": "Aloita alusta",
+          "next": "PROLOGUE"
+        }
+      ]
+    },
+    "THE_ENDING_7": {
+      "texts": [
+        "Hirviö lähtee jonnekin kauas luolan syvyyksiin.",
+        "Poistut luolasta.",
+        "— Joko kaikki on ohi?",
+        "Sanot, ettei uhkaa enää ole.",
+        "— Vai niin? Mutta missä ovat todisteet?",
+        "Kerro, ettei luolassa ole enää hirviötä.",
+        "— Aivan, ja mehän uskomme sinua. Älä odota kultaa ennen kuin tuot todisteita.",
+        "Lopulta et saanut lainkaan kultaa, ja hirviö jäi luolaan.",
+        "LOPPU 7: Hirviö jäi luolaan, mutta kukaan ei saanut tietää siitä."
+      ]
+    },
+    "THE_ENDING_7.5": {
+      "texts": [
+        "Hirviö lähtee jonnekin kauas luolan syvyyksiin.",
+        "Poistut luolasta.",
+        "— Joko kaikki on ohi?",
+        "Sanot, ettei uhkaa enää ole.",
+        "— Vai niin? Mutta missä ovat todisteet?",
+        "Kerro, ettei luolassa ole enää hirviötä.",
+        "— Pidä se mielessäsi. Jos jotain tapahtuu miehilleni...",
+        "— Voit hakea kultasi killasta.",
+        "Lopulta et saanut lainkaan kultaa. Mutta ainakin säästit mahdollisimman monta henkeä.",
+        "LOPPU 7.5: Hirviö jäi luolaan, mutta kukaan ei saanut tietää siitä, ja sinä sait palkkiosi."
+      ]
+    }
+  }
+}
