@@ -1,0 +1,223 @@
+.dice-container {
+  width: min(420px, 90%);
+  margin: 30px auto;
+  padding: 24px 28px;
+
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(circle at 50% 0%, rgba(126, 94, 43, 0.18), transparent 55%),
+    linear-gradient(145deg, #211e1a, #151412);
+
+  border: 1px solid #705b35;
+  border-radius: 12px;
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  color: #e8dfce;
+
+  text-align: center;
+
+  position: relative;
+  overflow: hidden;
+
+  animation: diceWindowAppear 0.35s ease-out;
+  position: absolute;
+  left: calc(50% - 210px);
+}
+
+/* Декоративная верхняя линия */
+
+.dice-container::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 10%;
+  right: 10%;
+
+  height: 2px;
+
+  background: linear-gradient(90deg, transparent, #b89552, transparent);
+
+  opacity: 0.8;
+}
+
+#dice-title {
+  margin-bottom: 10px;
+
+  color: #d6b66a;
+
+  font-size: 19px;
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
+
+  text-transform: uppercase;
+}
+
+/* =========================================
+   ТРЕБОВАНИЕ К БРОСКУ
+   ========================================= */
+
+#dice-requirement {
+  margin-bottom: 18px;
+
+  color: #aaa092;
+
+  font-size: 14px;
+}
+
+/* Выделяем число требования */
+
+#dice-requirement strong {
+  color: #e2c477;
+}
+
+/* =========================================
+   КУБИК / РЕЗУЛЬТАТ
+   ========================================= */
+
+#dice-result {
+  width: 110px;
+  height: 110px;
+
+  margin: 10px auto 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  background: linear-gradient(145deg, #312b23, #1b1916);
+
+  border: 2px solid #9b7b3f;
+  border-radius: 14px;
+
+  color: #f1d487;
+
+  font-size: 48px;
+  font-weight: 800;
+
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.45),
+    inset 0 0 15px rgba(184, 149, 82, 0.08);
+
+  transition:
+    transform 0.15s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* Лёгкое увеличение при смене результата */
+
+#dice-result.rolling {
+  transform: scale(1.05) rotate(2deg);
+
+  color: #fff1b8;
+
+  border-color: #d6b66a;
+}
+
+/* =========================================
+   СТАТУС БРОСКА
+   ========================================= */
+
+#dice-status {
+  min-height: 26px;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  letter-spacing: 0.4px;
+
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+/* Успех */
+
+#dice-status.success {
+  color: #79c47b;
+
+  text-shadow: 0 0 10px rgba(121, 196, 123, 0.25);
+
+  animation: statusAppear 0.35s ease-out;
+}
+
+/* Провал */
+
+#dice-status.failure {
+  color: #d66b62;
+
+  text-shadow: 0 0 10px rgba(214, 107, 98, 0.2);
+
+  animation: statusAppear 0.35s ease-out;
+}
+
+/* =========================================
+   АНИМАЦИЯ ПОЯВЛЕНИЯ ОКНА
+   ========================================= */
+
+@keyframes diceWindowAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================
+   АНИМАЦИЯ РЕЗУЛЬТАТА
+   ========================================= */
+
+@keyframes statusAppear {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================
+   МОБИЛЬНАЯ ВЕРСИЯ
+   ========================================= */
+
+@media (max-width: 600px) {
+  .dice-container {
+    width: 94%;
+
+    padding: 20px;
+    margin: 20px auto;
+  }
+
+  #dice-title {
+    font-size: 17px;
+  }
+
+  #dice-result {
+    width: 90px;
+    height: 90px;
+
+    font-size: 40px;
+  }
+
+  #dice-status {
+    font-size: 16px;
+  }
+}
