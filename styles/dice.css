@@ -28,7 +28,7 @@
   left: calc(50% - 210px);
 }
 
-/* Декоративная верхняя линия */
+/* Decorative top line */
 
 .dice-container::before {
   content: "";
@@ -60,7 +60,7 @@
 }
 
 /* =========================================
-   ТРЕБОВАНИЕ К БРОСКУ
+   ROLL REQUIREMENT
    ========================================= */
 
 #dice-requirement {
@@ -71,14 +71,14 @@
   font-size: 14px;
 }
 
-/* Выделяем число требования */
+/* Highlight requirement number */
 
 #dice-requirement strong {
   color: #e2c477;
 }
 
 /* =========================================
-   КУБИК / РЕЗУЛЬТАТ
+   DICE / RESULT
    ========================================= */
 
 #dice-result {
@@ -115,7 +115,7 @@
     color 0.2s ease;
 }
 
-/* Лёгкое увеличение при смене результата */
+/* Slight enlargement when result changes */
 
 #dice-result.rolling {
   transform: scale(1.05) rotate(2deg);
@@ -126,7 +126,7 @@
 }
 
 /* =========================================
-   СТАТУС БРОСКА
+   ROLL STATUS
    ========================================= */
 
 #dice-status {
@@ -142,7 +142,7 @@
     transform 0.25s ease;
 }
 
-/* Успех */
+/* Success */
 
 #dice-status.success {
   color: #79c47b;
@@ -152,7 +152,7 @@
   animation: statusAppear 0.35s ease-out;
 }
 
-/* Провал */
+/* Failure */
 
 #dice-status.failure {
   color: #d66b62;
@@ -163,7 +163,7 @@
 }
 
 /* =========================================
-   АНИМАЦИЯ ПОЯВЛЕНИЯ ОКНА
+   WINDOW APPEARANCE ANIMATION
    ========================================= */
 
 @keyframes diceWindowAppear {
@@ -179,7 +179,7 @@
 }
 
 /* =========================================
-   АНИМАЦИЯ РЕЗУЛЬТАТА
+   RESULT ANIMATION
    ========================================= */
 
 @keyframes statusAppear {
@@ -195,7 +195,7 @@
 }
 
 /* =========================================
-   МОБИЛЬНАЯ ВЕРСИЯ
+   MOBILE VERSION
    ========================================= */
 
 @media (max-width: 600px) {

@@ -1,6 +1,6 @@
 // script.js
-// Точка входа: связывает Engine и Player в единое состояние игры,
-// обрабатывает старт игры и открытие инвентаря.
+// Entry point: connects Engine and Player into a single game state,
+// handles game start and inventory opening.
 
 import { Player } from "./player.js";
 import { Engine } from "./engine.js";
@@ -15,16 +15,16 @@ const nameInput = document.getElementById("nameInput");
 
 const starGameAudio = new Audio("/sounds/undertale.mp3");
 
-// Один-единственный Engine на всю игру, Player получает ссылку на него.
-// Раньше player.js и script.js создавали ДВА разных Engine — из-за этого
-// печать описания предмета обновляла состояние, которое никто не видел.
+// Single Engine for the entire game, Player receives a reference to it.
+// Previously player.js and script.js created TWO different Engines — because of this
+// printing item description updated state that nobody could see.
 const engine = new Engine();
 const player = new Player(engine);
 
 startBtn.addEventListener("click", startGame);
 
-/* Начинает игру: ставит имя игрока, открывает игровой экран, 
-ставит скрипты на открытие инвенторя*/
+/* Starts the game: sets player name, opens game screen,
+sets scripts for opening inventory */
 
 function startGame() {
   const playerNameValue = nameInput.value.trim();
@@ -61,8 +61,8 @@ function toggleInventory() {
   gameFieldEl.classList.toggle("hide");
   inventoryEl.classList.toggle("hide");
 
-  // Перерисовываем список каждый раз, чтобы инвентарь всегда
-  // отражал актуальное состояние player.inventory.
+  // Redraw the list each time so the inventory always
+  // reflects the current state of player.inventory.
   if (!inventoryEl.classList.contains("hide")) {
     renderInventoryItems();
   }
@@ -74,8 +74,8 @@ function renderInventoryItems() {
 
   player.inventory.forEach((item) => {
     const btn = document.createElement("button");
-    // dataset вместо id: числовой/произвольный itemID
-    // не всегда является валидным HTML id.
+    // dataset instead of id: numeric/arbitrary itemID
+    // is not always a valid HTML id.
     btn.dataset.itemId = item.itemID;
     btn.textContent = item.itemName;
 

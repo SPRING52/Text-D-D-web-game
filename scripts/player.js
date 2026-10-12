@@ -1,7 +1,7 @@
 // player.js
-// Класс игрока. Больше НЕ создаёт собственный экземпляр Engine —
-// получает его извне, чтобы работать с тем же состоянием игры,
-// которое видит script.js (см. документацию, раздел "Главный баг").
+// Player class. No longer creates its own Engine instance —
+// receives it from outside to work with the same game state
+// that script.js sees (see documentation, "Main Bug" section).
 
 export class Player {
   constructor(engine) {
@@ -12,9 +12,9 @@ export class Player {
   }
 
   /**
-   * Использовать предмет из инвентаря по его itemID.
-   * Сравнение приведено к строкам, так как id кнопки в DOM
-   * всегда строка, а itemID в данных может быть числом.
+   * Use an item from inventory by its itemID.
+   * Comparison is converted to strings, since the button id in DOM
+   * is always a string, but itemID in data can be a number.
    */
   useItem(itemID) {
     const item = this.inventory.find(

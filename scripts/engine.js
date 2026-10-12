@@ -1,5 +1,5 @@
 // engine.js
-// Pelimoottori: skenaarion lataaminen, tekstin tulostaminen, valintojen näyttäminen, esineiden käsittely.
+// Game engine: loading scenario, printing text, showing choices, handling items.
 const TYPING_SPEED_MS = 40;
 const textTypeAudio = new Audio("/sounds/text.mp3");
 
@@ -7,16 +7,16 @@ const language = document.documentElement.lang;
 console.log(language);
 
 /**
- * Lataa JSON-tiedoston, joka sisältää skriptin.
- * Siirretty erilliseen funktioon, jossa käsitellään verkkovirheitä,
- * jotta fetch-kutsun epäonnistuminen ei kaataisi koko moduulia ilman selitystä.
+ * Loads a JSON file containing the script.
+ * Moved to a separate function that handles network errors,
+ * so that a failed fetch call doesn't crash the entire module without explanation.
  */
 async function loadStoryRU(path = "../scenarioRU.json") {
   const response = await fetch(path);
 
   if (!response.ok) {
     throw new Error(
-      `Skriptiä (${path}) ei voitu ladata: ${response.status} ${response.statusText}`,
+      `Script (${path}) could not be loaded: ${response.status} ${response.statusText}`,
     );
   }
 
@@ -28,17 +28,17 @@ async function loadStoryFI(path = "../scenarioFI.json") {
 
   if (!response.ok) {
     throw new Error(
-      `Skriptiä (${path}) ei voitu ladata: ${response.status} ${response.statusText}`,
+      `Script (${path}) could not be loaded: ${response.status} ${response.statusText}`,
     );
   }
 
   return response.json();
 }
 
-// Skriptitiedosto ladataan kerran, kun moduuli tuodaan ensimmäisen kerran.
-// Top-level await -ominaisuuden ansiosta kaikki, jotka tuovat Engine-moduulin, saavat
-// valmiit tiedot — uusia pyyntöjä ei tehdä, koska ES-moduulit
-// suoritetaan kerran ja ne tallennetaan välimuistiin ajon aikana.
+// Script file is loaded once when the module is imported for the first time.
+// Thanks to the top-level await feature, everyone who imports the Engine module gets
+// ready data — no new requests are made, because ES modules
+// are executed once and cached during runtime.
 let storyData = null;
 if (language === "ru") {
   storyData = await loadStoryRU();
@@ -64,23 +64,23 @@ export class Engine {
     this.timeoutId = null;
     this.textMode = "scene";
 
-    // Pelaaja, johon tämä moottori on liitetty (tarvitaan valintaehtojen tarkistamista varten).
-    // Määritetään init(player)-funktiolla, ei ulkopuolisen globaalin objektin kautta.
+    // Player to which this engine is attached (needed for checking choice conditions).
+    // Set by the init(player) function, not through an external global object.
     this.player = null;
 
     this.gameplayFieldEl = document.querySelector(".gameplay-field");
     this.textField = document.getElementById("text");
     this.choiceEl = document.getElementById("choices");
 
-    // Liitämme tapahtumankäsittelijän kerran, jotta sitä voidaan turvallisesti
-    // poistaa tai lisätä removeEventListener-funktiolla.
+    // Attach event handler once so it can be safely
+    // removed or added with removeEventListener.
     this._onFieldClick = this.handleTextBoxClick.bind(this);
 
-    // Tällä hetkellä tulostettava teksti (tarvitaan skipToEnd-funktiota varten).
+    // Currently printing text (needed for the skipToEnd function).
     this._currentFullText = "";
 
-    // Toimintojen käsittelijöiden rekisteri. Avain on JSON-tiedoston action.type,
-    // arvo on funktio (action, engine) => void | string (seuraavan kohtauksen tunnus)
+    // Action handlers registry. Key is action.type from JSON file,
+    // value is a function (action, engine) => void | string (next scene id)
     this.actionHandlers = {
       addItem: (action) => this._addItem(action.item),
       toChoices: (action) => ({
@@ -94,21 +94,21 @@ export class Engine {
   }
 
   /**
-   * Pelin alustaminen: määrittää pelaajan, asettaa klikkauskäsittelijän
-   * pelikentälle ja käynnistää ensimmäisen kohtauksen.
+   * Initialize the game: set player, attach click handler
+   * to the game field and start the first scene.
    */
   init(player) {
     this.player = player;
     console.log(this.story);
-    // removeEventListener ennen add — suojaa toistuvilta init()-kutsuilta,
-    // jotta käsittelijää ei luoda kahdesti.
+    // removeEventListener before add — protects from repeated init() calls,
+    // so the handler is not created twice.
     this.gameplayFieldEl.removeEventListener("click", this._onFieldClick);
     this.gameplayFieldEl.addEventListener("click", this._onFieldClick);
 
     this.startScene(this.currentIndex);
   }
 
-  /** Käynnistää kohtauksen seuraavan tekstin tulostuksen. */
+  /** Starts the scene's next text printing. */
   startScene(index, { fromLastText = false } = {}) {
     this.textMode = "scene";
     this.currentIndex = index;
@@ -120,7 +120,7 @@ export class Engine {
     this._type(texts[this.textIndex]);
   }
 
-  /** Näyttää esineen kuvauksen (käytetään Player.useItem-funktiota). */
+  /** Shows item description (used by Player.useItem). */
   showItemDescription(description) {
     this.textMode = "item";
     this.isComplete = false;
@@ -132,10 +132,10 @@ export class Engine {
   }
 
   /**
-   * Yhtenäinen funktio tekstin merkki kerrallaan tulostamiseen.
-   * Korvaa aiemmat päällekkäiset typeCharacter()/typeItemDescription()-funktiot —
-   * nyt sama koodi käsittelee sekä kohtauksia että esineitä,
-   * eikä merkkijonoa koota uudelleen split()-funktiolla jokaisella iteraatiolla.
+   * Unified function for printing text character by character.
+   * Replaces previous overlapping typeCharacter()/typeItemDescription() functions —
+   * now the same code handles both scenes and items,
+   * and the string is not rebuilt with split() on each iteration.
    */
   _type(fullText) {
     clearTimeout(this.timeoutId);
@@ -161,7 +161,7 @@ export class Engine {
     step();
   }
 
-  /** Tekstin tulostuksen päättymisen käsittely. */
+  /** Handling text printing completion. */
   _finishTyping() {
     this.isTyping = false;
     this.isComplete = true;
@@ -175,14 +175,14 @@ export class Engine {
     }
   }
 
-  /** Klikkaus pelikenttään: joko selaa tekstiä eteenpäin tai siirry seuraavaan kohtaan. */
+  /** Click on game field: either scroll text forward or move to next point. */
   handleTextBoxClick() {
     if (this.isTyping) {
       this.skipToEnd();
       return;
     }
 
-    // Jos esineen kuvaus on auki, palataan nykyiseen kohtaukseen.
+    // If item description is open, return to current scene.
     if (this.textMode === "item") {
       this.startScene(this.currentIndex);
       return;
@@ -199,7 +199,7 @@ export class Engine {
     }
   }
 
-  /** Tulostaa nykyisen tekstin kokonaisuudessaan välittömästi. */
+  /** Prints the current text in full immediately. */
   skipToEnd() {
     clearTimeout(this.timeoutId);
 
@@ -209,7 +209,7 @@ export class Engine {
     this._finishTyping();
   }
 
-  /** Piirtää nykyisessä kohtauksessa käytettävissä olevat valintapainikkeet. */
+  /** Draws the available choice buttons in the current scene. */
   showChoices(choices) {
     this.choiceEl.innerHTML = "";
     this.choiceIsShown = true;
@@ -236,7 +236,7 @@ export class Engine {
         const { overrideNext, fromLastText } = this.runActions(choice.actions);
         const targetScene = overrideNext ?? choice.next;
 
-        console.log(`Следующая сцена: ${targetScene}`);
+        console.log(`Next scene: ${targetScene}`);
 
         this.startScene(targetScene, { fromLastText });
       });
@@ -244,14 +244,14 @@ export class Engine {
       this.choiceEl.appendChild(btn);
     });
 
-    // Jos kaikki vaihtoehdot on suodatettu ehtojen perusteella, piilotamme valintalohkon.
+    // If all choices were filtered out by conditions, we hide the choice block.
     if (!hasVisibleChoice) {
       this.choiceEl.classList.add("hide");
       this.choiceIsShown = false;
     }
   }
 
-  /** Tarkistaa valinnan avaamisen ehdon (esimerkiksi kohteen olemassaolon). */
+  /** Checks the condition for opening a choice (for example, item existence). */
   checkCondition(condition) {
     if (!condition) return true;
 
@@ -269,9 +269,9 @@ export class Engine {
   }
 
   /**
-   * Suorittaa valintatoimintojen luettelon yksi kerrallaan.
-   * Jos jokin käsittelijä palautti kohtauksen tunnuksen (esimerkiksi nopan
-   * heiton jälkeen), sitä käytetään tavallisen choice.next-komennon sijaan.
+   * Executes the list of choice actions one at a time.
+   * If any handler returned a scene identifier (for example, after a dice
+   * roll), it is used instead of the regular choice.next command.
    */
   runActions(actions = []) {
     const result = { overrideNext: null, fromLastText: false };
@@ -279,14 +279,14 @@ export class Engine {
     for (const action of actions ?? []) {
       const handler = this.actionHandlers[action.type];
       if (!handler) {
-        console.warn(`Неизвестный тип действия: "${action.type}"`);
+        console.warn(`Unknown action type: "${action.type}"`);
         continue;
       }
       console.log(action);
       const output = handler(action);
 
-      // Обработчик может вернуть строку (id сцены, как раньше у rollDice)
-      // или объект с доп. настройками (как у toChoices)
+      // Handler can return a string (scene id, as before with rollDice)
+      // or an object with additional settings (as with toChoices)
       if (typeof output === "string") {
         result.overrideNext = output;
       } else if (output && typeof output === "object") {
@@ -314,13 +314,13 @@ export class Engine {
     this.lastRoll = roll;
 
     console.log(
-      `🎲 Бросок d${die}: выпало ${roll} (порог ${threshold}) — ${
-        success ? "УСПЕХ" : "ПРОВАЛ"
+      `🎲 Roll d${die}: rolled ${roll} (threshold ${threshold}) — ${
+        success ? "SUCCESS" : "FAILURE"
       }`,
     );
 
     if (success) return onSuccess;
-    return onFail; // undefined, если onFail не задан -> сработает choice.next
+    return onFail; // undefined if onFail is not set -> choice.next will trigger
   }
 
   _spendGold(gold) {
