@@ -122,7 +122,7 @@ Replaces placeholders in text with player data:
 - `{name}` → Player name
 - `{gold}` → Current gold amount
 
-Example: `"Hello, {name}! You have {gold} gold."` → `"Hello, Erik! You have 40 gold."`
+Example: `"Hello, {name}! You have {gold} gold."` → `"Hello, Spring! You have 40 gold."`
 
 ### 2. Player Module (`player.js`)
 
@@ -239,7 +239,7 @@ function handleGlobalKeydown(event) {
 
 ## JSON Scenario Format
 
-Your game scenarios are defined in JSON files with the following structure:
+The game scenarios are defined in JSON files with the following structure:
 
 ```json
 {
@@ -416,57 +416,6 @@ Edit CSS custom properties in `style.css`:
 }
 ```
 
-## Key Programming Concepts Demonstrated
-
-### 1. **Asynchronous Programming**
-
-- Top-level await for module initialization
-- Async/await for JSON loading
-- Error handling with try-catch patterns
-
-### 2. **Object-Oriented Design**
-
-- Class-based architecture
-- Encapsulation of state and behavior
-- Dependency injection (Player receives Engine)
-
-### 3. **Event-Driven Architecture**
-
-- DOM event listeners
-- Event delegation with `stopPropagation()`
-- Keyboard shortcuts
-
-### 4. **State Management**
-
-- Single source of truth (one Engine instance)
-- State synchronization between modules
-- Immutable scene data with mutable player state
-
-### 5. **Design Patterns**
-
-- **Registry Pattern**: Action handlers system
-- **Observer Pattern**: Event listeners
-- **Module Pattern**: ES6 module exports/imports
-- **Strategy Pattern**: Conditional action execution
-
-### 6. **Animation Techniques**
-
-- Recursive setTimeout for text typing
-- CSS keyframe animations
-- JavaScript-controlled animation timing
-
-### 7. **Conditional Rendering**
-
-- Dynamic choice filtering based on game state
-- Template string interpolation
-- DOM manipulation with `createElement`
-
-### 8. **Data-Driven Design**
-
-- JSON-based scenario system
-- Extensible action system
-- Separation of content from logic
-
 ## Running the Project
 
 1. **Clone the repository**
@@ -530,46 +479,6 @@ http://localhost:8000/indexFI.html
 - **DRY Principle**: Unified `_type()` method replaces duplicate code
 - **Single Responsibility**: Each module has a clear purpose
 - **Type Safety**: String comparison for itemID (handles mixed types)
-
-## Learning Outcomes
-
-This project demonstrates proficiency in:
-
-**JavaScript Fundamentals**
-
-- ES6+ syntax (classes, arrow functions, destructuring)
-- Async/await and Promises
-- Module system (import/export)
-
-**DOM Manipulation**
-
-- Dynamic element creation
-- Event handling and delegation
-- Class list manipulation
-
-**Software Architecture**
-
-- Modular design
-- Separation of concerns
-- Dependency management
-
-**Problem Solving**
-
-- Recursive algorithms (text animation)
-- Conditional logic (choice system)
-- State management (game state tracking)
-
-**User Experience**
-
-- Smooth animations
-- Keyboard shortcuts
-- Responsive design
-
-**Version Control**
-
-- Git workflow
-- Commit history
-- Code organization
 
 ## Future Enhancement Ideas
 
