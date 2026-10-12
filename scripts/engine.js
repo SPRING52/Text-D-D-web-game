@@ -4,7 +4,6 @@ const TYPING_SPEED_MS = 40;
 const textTypeAudio = new Audio("/sounds/text.mp3");
 
 const language = document.documentElement.lang;
-console.log(language);
 
 /**
  * Loads a JSON file containing the script.
@@ -99,7 +98,6 @@ export class Engine {
    */
   init(player) {
     this.player = player;
-    console.log(this.story);
     // removeEventListener before add — protects from repeated init() calls,
     // so the handler is not created twice.
     this.gameplayFieldEl.removeEventListener("click", this._onFieldClick);
@@ -192,7 +190,6 @@ export class Engine {
 
     if (this.textIndex < currentTexts.length - 1) {
       this.textIndex++;
-      console.log(this.textIndex);
       this._type(this.story[this.currentIndex].texts[this.textIndex]);
     } else if (!this.choiceIsShown) {
       this.showChoices(this.story[this.currentIndex].choices);
@@ -235,8 +232,6 @@ export class Engine {
 
         const { overrideNext, fromLastText } = this.runActions(choice.actions);
         const targetScene = overrideNext ?? choice.next;
-
-        console.log(`Next scene: ${targetScene}`);
 
         this.startScene(targetScene, { fromLastText });
       });
@@ -282,7 +277,6 @@ export class Engine {
         console.warn(`Unknown action type: "${action.type}"`);
         continue;
       }
-      console.log(action);
       const output = handler(action);
 
       // Handler can return a string (scene id, as before with rollDice)
@@ -312,12 +306,6 @@ export class Engine {
     const success = roll >= threshold;
 
     this.lastRoll = roll;
-
-    console.log(
-      `🎲 Roll d${die}: rolled ${roll} (threshold ${threshold}) — ${
-        success ? "SUCCESS" : "FAILURE"
-      }`,
-    );
 
     if (success) return onSuccess;
     return onFail; // undefined if onFail is not set -> choice.next will trigger
